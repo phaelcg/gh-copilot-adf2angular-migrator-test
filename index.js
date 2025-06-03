@@ -1,8 +1,10 @@
-const express = require('express');
+import express from 'express';
+import { Octokit } from "@octokit/core";
+import { Readable } from "stream";
+
 const app = express();
 const PORT = process.env.PORT || 5000;
-const { Octokit } = require("@octokit/core");
-const { Readable } = require("stream");
+
 
 app.get('/', (req, res) => {
   res.send('Hello World from Express!');
