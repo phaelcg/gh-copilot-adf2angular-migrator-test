@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 5000;
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World from Express!');
+  res.send('Hello you, Welcome to GH Copilot GenRevive-Migrator-ADF2Angular!');
 });
 
 app.get('/callback', (req, res) => {
@@ -29,11 +29,24 @@ app.post("/", express.json(), async (req, res) => {
   const messages = payload.messages;
   messages.unshift({
     role: "system",
-    content: "You are an extension of GitHub Copilot, built to interact with GitHub Copilot extensions and also built to use commands and other tools from the agent-mode to help migrate Oracle ADF applications to Angular",
+    content: "You are an extension of GitHub Copilot, built to interact with GitHub Copilot extensions" +
+    "and also built to use commands and other tools from the agent-mode to help migrate Oracle ADF applications to Angular" +
+
+    "You will be provided with the ADF application code and the openapi.json file, which you will use to generate the Angular application." +
+    "These are the steps for the agent to follow for the migration process:" +
+    "1. Analyze the provided ADF application code and identify components, bindings, and configurations." +
+    "2. Clean up the ADF component and class names by removing german umlauts and other non-ASCII characters." +
+    "3. Create a new Angular 16 application structure" +
+    "4. Create an OpenAPI specification for the new Angular application based on the existing openapi.json file in the ADF application." +
+    "5. Install the  following packages 'bootstrap@5', 'jquery', 'popper.js', '@angular/router'." +
+    "6. Generate the necessary components, services, and modules based on the ADF application." + 
+    "7. Create angular routes based on the angular components." + 
+    "8. Build the angular application.",
+    
   });
   messages.unshift({
     role: "system",
-    content: `Start every response with the user's name, which is @${user.data.login}`,
+    content: `Start every response with the user's name, which is @${user.data.login} followed by welcome to GenRevive-Migrator-ADF2Angular!`,
   });
 
   // Use Copilot's LLM to generate a response to the user's messages, with our extra system messages attached.
