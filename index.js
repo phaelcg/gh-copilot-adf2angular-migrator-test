@@ -1,0 +1,59 @@
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 5000;
+const { Octokit } = require("@octokit/core");
+const { Readable } = require("stream");
+
+app.get('/', (req, res) => {
+  res.send('Hello World from Express!');
+});
+
+app.get('/callback', (req, res) => {
+  res.send('You may close this window and return to GH where you started');
+});
+
+app.post("/", express.json(), async (req, res) => {
+  // Identify the user, using the GitHub API token provided in the request headers.
+  const tokenForUser = req.get("X-GitHub-Token");
+  const octokit = new Octokit({ auth: tokenForUser });
+  const user = await octokit.request("GET /user");
+  console.log("User:", user.data.login);
+
+  // Parse the request payload and log it.
+  const payload = req.body;
+  console.log("Payload:", payload);
+
+  // Insert the required system message in our message list.
+  const messages = payload.messages;
+  messages.unshift({
+    role: "system",
+    content: "You are an extension of GitHub Copilot, built to interact with GitHub Copilot extensions and also built to use commands and other tools from the agent-mode to help migrate Oracle ADF applications to Angular",
+  });
+  messages.unshift({
+    role: "system",
+    content: `Start every response with the user's name, which is @${user.data.login}`,
+  });
+
+  // Use Copilot's LLM to generate a response to the user's messages, with our extra system messages attached.
+  const copilotLLMResponse = await fetch(
+    "https://api.githubcopilot.com/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${tokenForUser}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        messages,
+        stream: true,
+      }),
+    }
+  );
+
+  // Stream the response straight back to the user.
+  Readable.from(copilotLLMResponse.body).pipe(res);
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
