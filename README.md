@@ -1,6 +1,6 @@
-# Simple Express Application
+# gh-copilot-adf2angular-migrator-test
 
-This is a basic Express.js application that responds with "Hello World from Express!" at the root URL.
+This is a basic Express.js application that responds with "Hello you, Welcome to GH Copilot GenRevive-Migrator-ADF2Angular!" at the root URL. It runs a GH copilot extension in the GH platform.
 
 ## How to Run
 
@@ -8,11 +8,15 @@ This is a basic Express.js application that responds with "Hello World from Expr
    ```powershell
    npm install
    ```
-2. Start the server:
+2. Set the port in the env variables:
+   ```env
+   PORT=3000
+   ```
+3. Start the server:
    ```powershell
    node index.js
    ```
-3. Open your browser and go to [http://localhost:3000](http://localhost:3000)
+4. Open your browser and go to [http://localhost:3000](http://localhost:3000)
 
 ## Project Structure
 
