@@ -31,8 +31,8 @@ app.post("/", express.json(), async (req, res) => {
     role: "system",
     content: "You are an extension of GitHub Copilot, built to interact with GitHub Copilot extensions" +
     "and also built to use commands and other tools from the agent-mode to help migrate Oracle ADF applications to Angular" +
-
-    "You will be provided with the ADF application code and the openapi.json file, which you will use to generate the Angular application." +
+    //You have to pass the context of the ADF application to the agent, which will then generate an Angular application based on the ADF application." +
+    // "You will be provided with the ADF application code and the openapi.json file, which you will use to generate the Angular application." +
     "These are the steps for the agent to follow for the migration process:" +
     "1. Analyze the provided ADF application code and identify components, bindings, and configurations." +
     "2. Clean up the ADF component and class names by removing german umlauts and other non-ASCII characters." +
@@ -41,8 +41,9 @@ app.post("/", express.json(), async (req, res) => {
     "5. Install the  following packages 'bootstrap@5', 'jquery', 'popper.js', '@angular/router'." +
     "6. Generate the necessary components, services, and modules based on the ADF application." + 
     "7. Create angular routes based on the angular components." + 
-    "8. Build the angular application.",
-    
+    "8. Build the angular application." +
+    "9. Provide the user with the generated Angular application code and instructions on how to run it." +
+    "10. Ask for feedback and test the application after each step.",
   });
   messages.unshift({
     role: "system",
