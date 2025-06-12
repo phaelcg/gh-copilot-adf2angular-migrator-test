@@ -1,13 +1,34 @@
 import express from 'express';
 import { Octokit } from "@octokit/core";
 import { Readable } from "stream";
+import * as fs from 'fs';
+import * as path from 'path';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+export function* readAllFiles(dir) {
+  const files = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const file of files) {
+    if (file.isDirectory()) {
+      yield* readAllFiles(path.join(dir, file.name));
+    } else {
+      yield path.join(dir, file.name);
+    }
+  }
+}
 
 app.get('/', (req, res) => {
   res.send('Hello you, Welcome to GH Copilot GenRevive-Migrator-ADF2Angular!');
+  // console.log('Files in input directory:');
+  // for (const file of readAllFiles('./input')) {
+  //    if (file.endsWith('.java') || file.endsWith('.xml') || file.endsWith('.json')) {
+  //      const content = fs.readFileSync(file, 'utf8');
+  //     console.log(`File: ${file}`);
+  //     console.log(`Content: ${content}`);
+  //    }
+  // }
 });
 
 app.get('/callback', (req, res) => {
@@ -27,6 +48,19 @@ app.post("/", express.json(), async (req, res) => {
 
   // Insert the required system message in our message list.
   const messages = payload.messages;
+
+  //attach context to the messages
+  for (const file of readAllFiles('./input')) {
+    if (file.endsWith('.java') || file.endsWith('.xml') || file.endsWith('.json')) {
+      const content = fs.readFileSync(file, 'utf8');
+      messages.unshift({
+        role: "system",
+        content: `The following file is part of the ADF application: ${file} with content: ${content}`,
+      });
+      console.log(content);
+    }
+  }
+
   messages.unshift({
     role: "system",
     content: "You are an extension of GitHub Copilot, built to interact with GitHub Copilot extensions" +
