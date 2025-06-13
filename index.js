@@ -50,16 +50,16 @@ app.post("/", express.json(), async (req, res) => {
   const messages = payload.messages;
 
   //attach context to the messages
-  for (const file of readAllFiles('./input')) {
-    if (file.endsWith('.java') || file.endsWith('.xml') || file.endsWith('.json')) {
-      const content = fs.readFileSync(file, 'utf8');
-      messages.unshift({
-        role: "system",
-        content: `The following file is part of the ADF application: ${file} with content: ${content}`,
-      });
-      console.log(content);
-    }
-  }
+  // for (const file of readAllFiles('./input')) {
+  //   if (file.endsWith('.java') || file.endsWith('.xml') || file.endsWith('.json')) {
+  //     const content = fs.readFileSync(file, 'utf8');
+  //     messages.unshift({
+  //       role: "system",
+  //       content: `The following file is part of the ADF application: ${file} with content: ${content}`,
+  //     });
+  //     console.log(content);
+  //   }
+  // }
 
   messages.unshift({
     role: "system",
